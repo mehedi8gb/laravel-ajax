@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\crud;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -12,10 +13,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -24,7 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        return view('home');
+        $data = crud::get();
+        return view('home' ,compact('data'));
+    }
+    public function forceLogin()
+    {
+        return view('auth.login');
     }
 }

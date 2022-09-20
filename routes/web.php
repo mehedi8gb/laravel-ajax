@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth')->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'forceLogin'])->name('login');
 
 Route::prefix('crud')->middleware('auth')->group(function () {
     Route::get('/', [crudController::class, 'index'])->name('crud.index');

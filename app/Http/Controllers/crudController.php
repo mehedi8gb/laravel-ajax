@@ -7,7 +7,8 @@ use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Laracasts\Flash\Flash;
+use Illuminate\Support\Facades\Auth;
 
 class crudController extends Controller
 {
@@ -19,7 +20,9 @@ class crudController extends Controller
     public function index()
     {
         $crud = crud::get();
-        return view('welcome' ,compact('crud'));
+        flash('Welcome '.Auth::user()->name);
+
+        return view('welcome' , compact('crud'));
     }
 
     /**
@@ -30,11 +33,11 @@ class crudController extends Controller
     public function data()
     {
         $data = crud::get();
-        if($data){
+        if($data)
             return $data;
-        }else{
+        else
             abort(500, 'no data');
-        }
+
 
     }
     public function create()
@@ -50,14 +53,27 @@ class crudController extends Controller
      */
     public function store(Request $request)
     {
-       $data = new crud();
-       $data->user_id = $request->user_id;
-       $data->name = $request->name;
-       $data->email = $request->email;
-       $data->created_at = Carbon::now();
-       $data->save();
-       flash('Done! Data Added.')->success();
-       return 1;
+       if($request->name && $request->email){
+
+          $validate =  $request->validate([
+                'email' => 'required'
+            ]);
+        if (!$validate) {
+                return 2;
+         }
+        $data = new crud();
+        $data->user_id = $request->user_id;
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->created_at = Carbon::now();
+        $data->save();
+        flash('Done! Data Added.')->success();
+        return 1;
+       }else{
+
+
+           return 0;
+       }
     }
 
     /**

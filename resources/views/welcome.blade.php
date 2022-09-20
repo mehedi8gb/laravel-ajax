@@ -26,9 +26,10 @@
                                     {{ $item->name }}
                                 </td>
                                 <td>
-            <button type="button" class="btn btn-sm btn-soft-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $item->author->name }} is the author">
-               {{ $item->author->name}}
-            </button>
+                                    <button type="button" class="btn btn-sm btn-soft-secondary" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="{{ $item->author->name }} is the author">
+                                        {{ $item->author->name }}
+                                    </button>
                                 </td>
                                 <td>
                                     {{ $item->email }}
@@ -87,10 +88,61 @@
 
                 success: function(response) {
                     if (response == 0) {
-                        alert('Make Sure Payment Status is Paid');
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Some Field is missing please check!'
+                        })
                     }
                     if (response == 1) {
-                        onLoad()
+                        onLoad();
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data successfully inserted'
+                        })
+
+                    }
+                    if (response == 2) {
+                        onLoad();
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Email Missing inserted'
+                        })
 
                     }
                 }
@@ -122,19 +174,19 @@
                 success: function(response) {
                     $('.modal-body').html('');
                     $('.modal-body').append('<div class="modal-body">\
-           <form method="post" data-toogle="validator">\
-           	@csrf\
-            @method('POST ')\
-             <div class="form-group">\
-             <input type="hidden" name="id" value="' + response.id + '" id="Id">\
-               <label for="name">Name</label>\
-               <input type="text" class="form-control" value="' + response.name + '" name="name" id="Name" required="" autofocus="">\
-             </div>\
-             <div class="form-group">\
-               <label for="email">Email </label>\
-               <input type="text" class="form-control" value="' + response.email + '" name="email" id="Email" required="" autofocus="">\
-             </div>\
-          </div>');
+               <form method="post" data-toogle="validator">\
+               	@csrf\
+                @method('POST ')\
+                 <div class="form-group">\
+                 <input type="hidden" name="id" value="' + response.id + '" id="Id">\
+                   <label for="name">Name</label>\
+                   <input type="text" class="form-control" value="' + response.name + '" name="name" id="Name" required="" autofocus="">\
+                 </div>\
+                 <div class="form-group">\
+                   <label for="email">Email </label>\
+                   <input type="text" class="form-control" value="' + response.email + '" name="email" id="Email" required="" autofocus="">\
+                 </div>\
+              </div>');
 
                 }
             });
@@ -162,7 +214,7 @@
         }
 
         function onLoad() {
-            let i = 1;
+            // let i = 1;
             $.ajax({
                 type: "GET",
                 dataType: "json",
@@ -172,16 +224,16 @@
 
                     $.each(response, function(key, value) {
                         $('.table > tbody').append('<tr>\
-                        <td> ' + i++ + ' </td>\
-                        <td> ' + value.name + ' </td>\
-                        <td> ' + value.email + ' </td>\
-                        <td> ' + value.created_at + ' </td>\
-                        <td> ' + value.updated_at + ' </td>\
-                        <td>\
-                <button data-toggle="modal" data-target="#editModal" onclick="viewData(' + value.id + ')" class="btn btn-info">edit</button>\
-                <button onclick="Destroy(' + value.id + ')" class="btn btn-danger">delete</button>\
-                            </td>\
-                    </tr>');
+                            <td> ' + key++ + ' </td>\
+                            <td> ' + value.name + ' </td>\
+                            <td> ' + value.email + ' </td>\
+                            <td> ' + value.created_at + ' </td>\
+                            <td> ' + value.updated_at + ' </td>\
+                            <td>\
+                    <button data-toggle="modal" data-target="#editModal" onclick="viewData(' + value.id + ')" class="btn btn-info">edit</button>\
+                    <button onclick="Destroy(' + value.id + ')" class="btn btn-danger">delete</button>\
+                                </td>\
+                        </tr>');
                     });
                 }
             });
